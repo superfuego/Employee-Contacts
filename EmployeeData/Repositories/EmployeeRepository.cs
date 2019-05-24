@@ -93,7 +93,7 @@ namespace CompanyData.Repositories
 			}
 		}
 
-		public (Error, IEnumerable<Employee>) ListEmployees(int skip, int take)
+		public (Error, IEnumerable<Employee>) ListEmployees(int skip, int take, string departmentQueryString = null)
 		{
 			if (skip < 0)
 				return (new Error(new ArgumentOutOfRangeException("Skip can't be negative")), null);
@@ -103,7 +103,8 @@ namespace CompanyData.Repositories
 
 			try
 			{
-				return (null, Context.Employees.Include(e => e.Department).Where(e => e.Status == StatusEnum.Active).Skip(skip).Take(take));
+				return (null, Context.Employees.Include(e => e.Department).Where(e => e.Status == StatusEnum.Active 
+											&& (string.IsNullOrEmpty(departmentQueryString) || e.Department.Name.ToLower().Contains(departmentQueryString))).Skip(skip).Take(take));
 			}
 			catch (Exception ex)
 			{

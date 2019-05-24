@@ -24,9 +24,9 @@ namespace EmployeeContactInfo.Controllers
 		}
 
 		// GET: Employees
-		public IActionResult Index()
+		public IActionResult Index(string searchString)
 		{
-			var (error, employees) = _employeeRepository.ListEmployees(0, int.MaxValue);
+			var (error, employees) = _employeeRepository.ListEmployees(0, int.MaxValue, searchString?.ToLower());
 			if (error != null)
 			{
 				//All of the error handling here and in the rest of these methods is terrible.
